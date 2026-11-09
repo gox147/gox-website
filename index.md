@@ -147,10 +147,11 @@ go run ./packager counter.js --gui -o counter.exe   # 打包成独立 GUI 程序
 
 ## 版本与现状
 
-当前版本 **v0.18.0**，完整条目见 [GitHub Releases](https://github.com/14752222/Gox/releases)。
+当前版本 **v0.19.0**，完整条目见 [GitHub Releases](https://github.com/14752222/Gox/releases)。
 
 | 版本 | 内容 |
 | --- | --- |
+| 0.19.0 | 冷启动第一批 globals 惰性化 —— `Temporal`（~12%）与 TypedArray 家族（~11%）两棵几乎总不被最小脚本触碰的对象树改为按需物化：`Binding` 新增 lazy 字段与 `DeclareLazy`/`materialize`，名字立即声明占位（`BindingNames`/`typeof`/`hasOwnProperty` 可见性与立即声明逐位一致），首次 `Get` 才调工厂；五条写反射路径先物化，描述符语义不变；TypedArray 家族多名字共享工厂、物化时补齐 `length`/原型链/`@@species`。A/B（250×2 交错）：`startup_idle` 中位 **-10.4%**、min -12.6%、RSS -4.3%，早期探针 `3000×EvalFileVM` 累计 2.31s → 1.16s，fib28 / timers10k 噪声内无回归，test262 language 86.3125% 与基线逐位一致。折叠屏：`apps/foldable-demo` 收口为「一个窗口 + 形态栏 + 四个 Tab」，S1 由场景自身宽度信号驱动真重排、S2 折痕标尺 A/B（`avoidReserved="all"`）、S3 `isTabletop(posture, hinge)` 组合判据、S4 `screens()`/`screenOf()`/`bounds().displayId` 多屏示意，并生成 10 帧 30000ms 演示 GIF；顺手修掉两处内核缺陷（`reportPosture` 后 `avoidReserved` 不重算布局、结构槽位换支留残影）。GPU：三轨（nogpu / gpu / cgo）各一个 `TestBackendTrackReport` 钉住实际路径，新增 `gpu-track-audit.sh` 交叉编译抽查与 `gpu-present.yml` 无硬件兜底跑批；口径修正 —— 窗口化上屏最后一跳尚未接 swapchain，离屏合成 + Readback 才是当前真实路径 |
 | 0.18.0 | test262 C-3「crash 超时挂死」清扫完成 —— 一条根因带动一批：数组索引按规范判据（0…2^32-2 规范整数）分流，越界落普通属性、超密实上限如实抛 `RangeError` 快失败，不再物化 2^32 元素吃爆内存；`Array.length` 写入补 ToUint32≠ToNumber 校验；`arraySpeciesCreate` 补长度上限校验；`Promise` 自解析检查前移到 pending 分支之前（此前永不可达，`resolve-self` 族永久挂死）；迭代器 helper（`forEach`/`some`/`every`/`find`/`includes`）由 eager 收集改惰性驱动 + 短路即 `IteratorClose`；迭代器 `next()`/`value` getter 抛错不再被吞成 `(undefined, not-done)`；`JSON.stringify` 环检测由静态 `hasCycle` 改递归路径栈，覆盖 `toJSON`/`replacer` 动态造环；`unshift` 空参、`replaceAll` 空匹配两处死循环修复。A/B：超时挂死 **83 → 6**、crashed 0，built-ins **75.08% → 75.40%**（17914 → 17992，+78）、全量 80.69% → 80.85%，language 86.3125% 逐位持平零回归；批末地板抬升 language 85.0 → 86.0125、built-ins 50.0 → 75.1034、全量 80.0 → 80.5546 |
 | 0.17.0 | 通用帧 Locals 随帧池化复用（`acquireFrame` 命中即复用底层数组、命中时清零保 TDZ 语义，四条逃逸路径用闭包空判定 + 生成器前导帧判定 + 底层指针判等逐一拦下，容量 >512 的病态大帧不入池）—— fib28 堆分配 **-88%**、wall **418ms → 341ms（-18%）**；冷启动 `splitDots` 由逐字符拼接改为 `IndexByte` 子串切分，`SetupGlobals` 每次少约 4 万次小分配，启动 10ms → 9ms；test262 基线随 `2b499cc` 刷新，language 86.3% 守住批次地板 |
 | 0.16.0 | `ArrayBuffer.prototype.transfer` / `transferToFixedLength`（ES2024）落地 —— 分离转移语义与 TypedArray 视图同步；test262 口径核销完成：`docs/test262-gate.md` 成为合规率唯一权威口径，批次地板（language 85% / built-ins 50% / 全量 80%）进 CI 闸门（`test262-gate-floors.json` + `check-compliance.py` 强化），未登记 harness 全部登记、skipped 归零；现编现跑 language 86.3%、built-ins 75.1%、全量 80.7% |
