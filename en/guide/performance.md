@@ -7,33 +7,39 @@ description: "Gox measured performance and compliance data: interpreter throughp
 
 This page does exactly one thing: **let the numbers talk**. Every figure comes with a
 reproducible command, an explicit methodology and a published threshold — including the
-**one we miss**.
+**one we miss** (the 3× `fib28` red line against node stands at 6.9×, the inherent
+"pure interpreter vs JIT" gap; see the source of truth §3.2).
 
 ::: tip The one-line summary
 | Acceptance item | Verdict | Basis |
 | --- | --- | --- |
-| Interpreter on par with goja | ❌ **Missed** | `fib28` pure compute gox ≈ **311ms** vs goja ≈ **130ms** → **2.4× slower** (±25% threshold) |
-| UI free of GC pauses | ✅ **Passed** | Stressed-run aggregate p95 frame interval **5.95ms** ≤ 16.7ms; single GC pause max **1.382ms** ≤ 5ms |
+| Interpreter on par with goja | ✅ **Passed (CI re-test 2026-11-14)** | `fib28` gox **247ms** vs goja **203ms** → **1.22×** ≤ same-class threshold ×1.25 (history: 2.39× → 1.7× → 1.32× → 1.22×) |
+| UI free of GC pauses | ✅ **Passed** | 2026-11-14 CI stressed-run aggregate p95 frame interval **13.49ms** ≤ 16.7ms; single GC pause max **0.474ms** ≤ 5ms |
 | test262 `language` compliance | **97.0%** | v0.15.0 — up another **11.4pp** from 85.6% in 0.14.x |
 | test262 `built-ins` compliance | **62.1%** | 14804 / 23823 (up **26.4pp** from 35.7%); failures are still concentrated: the top 10 of 502 clusters cover 30.32% |
 :::
 
+> **Disclaimer (mandatory when quoting any bun / node / V8 comparison)**: gox is a **pure
+> interpreter** (zero cgo, walks bytecode directly, deliberately no JIT). The compute gap
+> against node (V8/JIT) and bun (JavaScriptCore/JIT) is mostly the **inherent
+> "pure interpreter vs JIT" gap** and must not be counted as Gox implementation defects;
+> **goja, also a pure interpreter, is the same-class baseline**.
+
 ## 1. Test environment
 
-All figures were measured on the same machine, on the same day, with the same scripts
-(zero dependencies, external timing).
+**Primary basis (CI re-test 2026-11-14)**: the bench workflow runs automatically on a GitHub
+ubuntu-26.04 runner (AMD EPYC 7763) with the same scripts, external timing and runs=5 medians;
+results are archived as `bench-results/bench-20261114-122404.json` (UI stress:
+`perf-stress-20261114-122532.json`).
 
-| Item | Value |
-| --- | --- |
-| Machine | Apple M2, 8 cores, 8 GB, macOS 26.6.2 (arm64) |
-| Go | go1.26.2 |
-| Node | v22.22.2 |
-| goja | `v0.0.0-20261001174550-3ccc9c78af18` (standalone `bench/goja` module) |
-| Date | 2026-10-02 (UTC) |
+```bash
+./scripts/bench-compare.sh --runs 5   # gox/node/bun/goja four stacks (missing stacks skip)
+./scripts/bench-all.sh --runs 5       # comparison table + UI frame/GC in one command
+```
 
-> On-device metrics (screen density, touch, frame rate, PSS memory, cold start) use a
-> different methodology and must **not** be subtracted from these; they live separately in
-> `docs/mobile-perf-baseline.md`.
+The historical baseline (2026-10-02, Apple M2) plus all measurement conditions and repro
+commands live in the single source of truth:
+[docs/performance.md](https://github.com/gox147/Gox/blob/main/docs/performance.md).
 
 ## 2. Interpreter throughput baseline
 
@@ -41,15 +47,14 @@ Three scripts: `startup_idle.js` (engine start + minimal evaluation), `fib28.js`
 (`fib(28)` recursion + 100k function calls) and `timers_10k.js` (10k `setTimeout(…,0)`
 all fired). Each external wall time is the median of 5 runs.
 
-```bash
-./scripts/bench-all.sh --runs 5
-```
+**2026-11-14 CI runner (EPYC 7763), four stacks, same methodology**:
 
 | Stack | Startup (ms) | fib28 + 100k calls (ms) | 10k timers (ms) | Idle RSS (KB) |
 | --- | ---: | ---: | ---: | ---: |
-| **gox** | 11 | **322** | 124 | 22592 |
-| **node (V8)** | 55 | 45 | 152 | 48432 |
-| **goja** | 7 | **137** | 121 | 7792 |
+| **gox** | 7 | **247** | 173 | 19976 |
+| **node (V8)** | 30 | 36 | 139 | 44056 |
+| **bun (JSC)** | 8 | 15 | 113 | 15524 |
+| **goja** | 6 | **203** | 122 | 7552 |
 
 Honest caveats: `fib28_ms` is **whole-script wall time** (startup + parse + evaluation);
 goja's kernel provides no host timers, so its timer column uses a minimal event loop and
@@ -58,29 +63,30 @@ throughput.
 
 ### 2.1 The truth after subtracting startup
 
-`fib28` wall time is polluted by startup — node's startup (55ms) is larger than its total
-`fib28` time (45ms), so that column is almost pure startup noise. Subtracting the
+`fib28` wall time is polluted by startup — node's startup (30ms) is nearly as large as its
+total `fib28` time (36ms), so that column is almost pure startup noise. Subtracting the
 `startup_idle` median:
 
 | Stack | Estimated fib28 pure compute | Relative to gox |
 | --- | ---: | --- |
-| gox | 322 − 11 ≈ **311 ms** | 1.00× |
-| goja | 137 − 7 ≈ **130 ms** | **0.42×** (goja is 2.4× faster) |
-| node / V8 | ≈ **5 ms** (`hrtime` inline) | **0.016×** (V8 is ~62× faster) |
+| gox | 247 − 7 ≈ **240 ms** | 1.00× |
+| goja | 203 − 6 ≈ **197 ms** | **0.82×** (goja ~1.2× faster, inside the same-class threshold) |
+| node / V8 | ≈ **6 ms** (hrtime inline) | inherent JIT gap, order-of-magnitude — not a target |
 
 **Stated honestly:**
 
 - gox is a **pure interpreter** (zero cgo, walking bytecode directly). Most of its gap to
   V8 is the **inherent interpreter-vs-JIT gap** and shouldn't all be blamed on the
   implementation.
-- The fair comparison target is **goja (also a pure interpreter)**: gox is about 2.4×
-  slower. That is the direct target for the next round of inline-cache / fast-path work.
+- The fair comparison target is **goja (also a pure interpreter)**: after three batches of
+  hot-spot work (frame pooling, inline caches, globalThis memo, number fast paths), `fib28`
+  vs goja is down to **1.22×**, inside the ×1.25 same-class threshold (CI-confirmed
+  2026-11-14).
 - Methodology warning: the older "~15× behind V8" figure is the **raw wall ratio**; on a
-  **pure-compute** basis the gap is **~60×**. Both are correct — you must state which one
-  you're quoting.
-- Where gox does well: **timer throughput is already on par with goja** (124ms vs 121ms,
-  2% apart), faster even than node on this machine (152ms); **startup is cheap**; idle RSS is
-  7.8MB (goja) / 22.6MB (gox) / 48.4MB (node). **The weak spot is the pure-compute hot loop.**
+  **pure-compute** basis the gap is order-of-magnitude. Both are correct — you must state
+  which one you're quoting.
+- Where gox does well: **startup is cheap** (same tier as bun/goja, clearly faster than
+  node); idle RSS is 7.6MB (goja) / 15.5MB (bun) / 20MB (gox) / 44MB (node).
 
 ### 2.2 The quantified definition of "on par"
 
@@ -89,8 +95,9 @@ gox_fib28_compute ≤ goja_fib28_compute × 1.25     // ±25% tolerance
 ```
 
 Pass ≤ ×1.25; excellent ≤ ×1.10; fail > ×1.25.
-Currently `311 / 130 ≈ 2.39× > 1.25` → **missed**; roughly a 2.4× pure-compute speedup is
-needed to clear the gate.
+Currently `247 / 203 ≈ 1.22× ≤ 1.25` → **passed** (history: 2.39× (10-02) → 1.7× (10-31) →
+1.32× (11-10 CI) → 1.22× (11-14 CI)); the anti-regression bench gate (bench.yml) went
+green in the same run.
 
 ## 3. UI frame rate and GC pauses
 
@@ -167,7 +174,11 @@ Verdict of "no GC pauses" holds iff:
 - **Why 5ms**: 5ms-class pauses are generally imperceptible; 10ms+ only shows up as a hitch
   during fast scrolling. The measured max of 1.382ms leaves **~3.6× headroom**.
 
-**Current verdict**: ① 5.95 ≤ 16.7 ✅; ② 1.382 ≤ 5 ✅ → **no GC pauses (passed)**.
+**Current verdict (CI re-test 2026-11-14, EPYC 7763)**: stressed-run aggregate p95 frame
+interval **13.49ms** ≤ 16.7 ✅; single GC pause max **0.474ms** ≤ 5 ✅ → **no GC pauses
+(passed)**, `perf-stress-20261114-122532.json`. Historical baseline (Apple M2, 2026-10-02):
+p95 5.95ms / GC pause max 1.382ms, also passed — absolute values drift across machine types;
+the verdict always applies the same-machine methodology.
 
 > Hard gate vs soft verdict: the `perf` test only fails hard on *order-of-magnitude*
 > regression (p99 > 200ms, GC pause max > 100ms, anomalous redraw counts), so ordinary jitter
@@ -301,7 +312,7 @@ frames are fully decoupled from row count.
 
 ---
 
-Sources: [`docs/performance.md`](https://github.com/14752222/Gox/blob/main/docs/performance.md),
+Sources: [`docs/performance.md`](https://github.com/gox147/Gox/blob/main/docs/performance.md),
 [`docs/test262-builtins-clusters.md`](https://github.com/14752222/Gox/blob/main/docs/test262-builtins-clusters.md),
 [`docs/compat-matrix.md`](https://github.com/14752222/Gox/blob/main/docs/compat-matrix.md).
 

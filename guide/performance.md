@@ -6,31 +6,36 @@ description: Gox 性能与合规实测数据：解释器算力对比 goja / V8�
 # 性能与合规数据
 
 这一页只做一件事：**用数字说话**。所有数字都有可复现的命令、明确的口径和公开的判定阈值 ——
-包括**未达标**的那一项。
+包括**未达标**的那一项（对 node 的 `fib28` 3 倍红线仍为 6.9× 未达成，属"纯解释器 vs JIT"
+固有差距，详见真相源 §3.2）。
 
 ::: tip 一句话结论
 | 验收项 | 判定 | 依据 |
 | --- | --- | --- |
-| 解释器算力达 goja 同级 | ❌ **未达标** | `fib28` 纯计算 gox ≈ **311ms** vs goja ≈ **130ms** → 慢 **2.4 倍**（阈值 ±25%） |
-| UI 无 GC 毛刺 | ✅ **达标** | 重压聚合 p95 帧间隔 **5.95ms** ≤ 16.7ms；单次 GC 停顿 max **1.382ms** ≤ 5ms |
+| 解释器算力达 goja 同级 | ✅ **达标（2026-11-14 CI 复测）** | `fib28` gox **247ms** vs goja **203ms** → **1.22×** ≤ 同类阈值 ×1.25（历史：2.39× → 1.7× → 1.32× → 1.22×） |
+| UI 无 GC 毛刺 | ✅ **达标** | 2026-11-14 CI 重压聚合 p95 帧间隔 **13.49ms** ≤ 16.7ms；单次 GC 停顿 max **0.474ms** ≤ 5ms |
 | test262 `language` 合规率 | **97.0%** | v0.15.0，较 0.14.x 的 85.6% **再提 11.4pp** |
 | test262 `built-ins` 合规率 | **62.1%** | 14804 / 23823（较 35.7% **+26.4pp**）；失败面仍集中：502 个簇里 Top 10 占 30.32% |
 :::
 
+> **口径免责（引用任何 bun / node / V8 对比数字时必须连同本段）**：gox 是**纯解释器**
+> （零 cgo、直接遍历字节码、刻意不做 JIT）。与 node(V8/JIT)、bun(JavaScriptCore/JIT)
+> 的算力差距主要是**"纯解释器 vs JIT"的固有差距**，不能都算 gox 的实现缺陷；
+> **goja 同为纯解释器，才是同类基线**。
+
 ## 一、测试环境
 
-所有数字在同一台机器、同一天、同一批脚本下测得（脚本零依赖、外部计时）。
+**主口径（2026-11-14 CI 复测）**：bench workflow 在 GitHub ubuntu-26.04 runner
+（AMD EPYC 7763）上自动跑，同源脚本、外部计时、每项 runs=5 取中位数；结果存档
+`bench-results/bench-20261114-122404.json`（UI 重压 `perf-stress-20261114-122532.json`）。
 
-| 项 | 值 |
-| --- | --- |
-| 机器 | Apple M2，8 核，8 GB，macOS 26.6.2（arm64） |
-| Go | go1.26.2 |
-| Node | v22.22.2 |
-| goja | `v0.0.0-20261001174550-3ccc9c78af18`（`bench/goja` 独立 module） |
-| 日期 | 2026-10-02（UTC） |
+```bash
+./scripts/bench-compare.sh --runs 5   # gox/node/bun/goja 四栈（缺栈自动跳过）
+./scripts/bench-all.sh --runs 5       # 对比表 + UI 帧率/GC 一条命令
+```
 
-> 真机侧指标（屏幕密度、触控、帧率、内存 PSS、冷启动）口径不同、**不可直接相减**，
-> 单独维护在 `docs/mobile-perf-baseline.md`。
+历史基线（2026-10-02，Apple M2）与全部测量条件、复现命令见真相源
+[docs/performance.md](https://github.com/gox147/Gox/blob/main/docs/performance.md)。
 
 ## 二、解释器算力基线
 
@@ -38,15 +43,14 @@ description: Gox 性能与合规实测数据：解释器算力对比 goja / V8�
 10 万次函数调用）、`timers_10k.js`（1 万次 `setTimeout(…,0)` 全部触发）。
 每项外部 wall time 跑 5 次取中位数。
 
-```bash
-./scripts/bench-all.sh --runs 5
-```
+**2026-11-14 CI runner（EPYC 7763）四栈同口径**：
 
 | 栈 | 启动 (ms) | fib28 + 10万次调用 (ms) | 1万次定时器 (ms) | 空载 RSS (KB) |
 | --- | ---: | ---: | ---: | ---: |
-| **gox** | 11 | **322** | 124 | 22592 |
-| **node (V8)** | 55 | 45 | 152 | 48432 |
-| **goja** | 7 | **137** | 121 | 7792 |
+| **gox** | 7 | **247** | 173 | 19976 |
+| **node (V8)** | 30 | 36 | 139 | 44056 |
+| **bun (JSC)** | 8 | 15 | 113 | 15524 |
+| **goja** | 6 | **203** | 122 | 7552 |
 
 口径诚实性：`fib28_ms` 是**整脚本 wall time**（含启动 + 解析 + 求值）；
 goja 内核不提供宿主定时器，其定时器列用一个最小事件循环补齐，**不能**当作
@@ -54,26 +58,26 @@ goja 内核不提供宿主定时器，其定时器列用一个最小事件循环
 
 ### 2.1 扣掉启动开销后的真相
 
-`fib28` 的 wall time 混着启动 —— node 的启动（55ms）比它的 `fib28` 总耗时（45ms）
+`fib28` 的 wall time 混着启动 —— node 的启动（30ms）比它的 `fib28` 总耗时（36ms）
 还大，说明那一列几乎全是启动噪声。用 `startup_idle` 中位数相减：
 
 | 栈 | fib28 纯计算估算 | 相对 gox |
 | --- | ---: | --- |
-| gox | 322 − 11 ≈ **311 ms** | 1.00× |
-| goja | 137 − 7 ≈ **130 ms** | **0.42×**（goja 快 2.4 倍） |
-| node / V8 | ≈ **5 ms**（`hrtime` 内联口径） | **0.016×**（V8 快约 62 倍） |
+| gox | 247 − 7 ≈ **240 ms** | 1.00× |
+| goja | 203 − 6 ≈ **197 ms** | **0.82×**（goja 快 ~1.2 倍，同类阈值内） |
+| node / V8 | ≈ **6 ms**（hrtime 内联口径） | JIT 固有差距，数十倍量级，不作为目标 |
 
 **诚实陈述**：
 
 - gox 是**纯解释器**（零 cgo、直接遍历字节码）。它与 V8 的差距里绝大部分是
   **"解释器 vs JIT"的固有差距**，不能都算成实现缺陷。
-- 真正该对标的是 **goja（同样纯解释器）**：gox 慢约 2.4 倍。这是下一轮
-  inline cache / 快速路径优化的直接靶子。
+- 真正该对标的是 **goja（同样纯解释器）**：T3-4 三批热点优化（帧池化、inline cache、
+  globalThis memo、数字快路径等）后，fib28 相对 goja 已收窄到 **1.22×**，落入
+  ×1.25 同类阈值（2026-11-14 CI 复测确认）。
 - 口径提醒：仓库旧数据里的"落后 V8 ~15 倍"是**原始 wall 比值**；按**纯计算**
-  口径是 **~60 倍**量级。两个数都对，引用时必须说清用的是哪个。
-- 亮点在别处：**定时器吞吐已与 goja 同级**（124ms vs 121ms，差 2%），甚至快于
-  本机 node（152ms）；**启动开销小**；空载 RSS 7.8MB(goja) / 22.6MB(gox) / 48.4MB(node)。
-  **短板集中在纯计算热循环。**
+  口径是数十倍量级。两个数都对，引用时必须说清用的是哪个。
+- 亮点在别处：**启动开销小**（与 bun/goja 同档，明显快于 node）；空载 RSS
+  7.6MB(goja) / 15.5MB(bun) / 20MB(gox) / 44MB(node)。
 
 ### 2.2 "同级"的量化定义
 
@@ -82,7 +86,9 @@ gox_fib28_compute ≤ goja_fib28_compute × 1.25     // ±25% 容差
 ```
 
 达标 ≤ ×1.25；优良 ≤ ×1.10；未达标 > ×1.25。
-当前 `311 / 130 ≈ 2.39× > 1.25` → **未达标**，需把纯计算提速约 2.4 倍才能落闸。
+当前 CI 口径 `247 / 203 ≈ 1.22× ≤ 1.25` → **达标**（历史轨迹
+2.39×（10-02）→ 1.7×（10-31）→ 1.32×（11-10 CI）→ 1.22×（11-14 CI）），
+防退潮闸门（bench.yml）同 run 全绿。
 
 ## 三、UI 帧率与 GC 毛刺
 
@@ -151,7 +157,10 @@ go test ./tools/perf/ -short     # 只跑轻量探针
 - **为什么 5ms**：5ms 级停顿通常不可感知，10ms+ 才会在快速滚动时"顿一下"。
   实测 max 仅 1.382ms，离阈值有 **~3.6 倍余量**。
 
-**当前判定**：① 5.95 ≤ 16.7 ✅；② 1.382 ≤ 5 ✅ → **无 GC 毛刺（达标）**。
+**当前判定（2026-11-14 CI 复测，EPYC 7763）**：重压聚合 p95 帧间隔 **13.49ms** ≤ 16.7 ✅；
+单次 GC 停顿 max **0.474ms** ≤ 5 ✅ → **无 GC 毛刺（达标）**，`perf-stress-20261114-122532.json`。
+历史基线（Apple M2，2026-10-02）：p95 5.95ms / GC 停顿 max 1.382ms，同样达标 ——
+绝对值随机型漂移，判定始终以同机口径为准。
 
 > 硬闸门 vs 软判定：`perf` 测试只对"数量级劣化"硬失败（p99 > 200ms、GC 停顿 max > 100ms、
 > 重绘帧数异常），正常抖动不会让 CI 误报；16.7 / 5ms 阈值作为 `verdict` 写进 JSON 供验收引用。
@@ -274,8 +283,8 @@ Top 10 簇（族 = 用例目录前 3 段）：
 
 ---
 
-数据来源：[`docs/performance.md`](https://github.com/14752222/Gox/blob/main/docs/performance.md)、
-[`docs/test262-builtins-clusters.md`](https://github.com/14752222/Gox/blob/main/docs/test262-builtins-clusters.md)、
-[`docs/compat-matrix.md`](https://github.com/14752222/Gox/blob/main/docs/compat-matrix.md)。
+数据来源：[`docs/performance.md`](https://github.com/gox147/Gox/blob/main/docs/performance.md)、
+[`docs/test262-builtins-clusters.md`](https://github.com/gox147/Gox/blob/main/docs/test262-builtins-clusters.md)、
+[`docs/compat-matrix.md`](https://github.com/gox147/Gox/blob/main/docs/compat-matrix.md)。
 
 下一站：[限制与常见误区](/components/limits) 看逐项缺口，或回到 [使用教程](/guide/) 开始写代码。
