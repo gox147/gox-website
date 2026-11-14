@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 const BASE = '/Gox/'
-const SITE = 'https://14752222.github.io'
+const SITE = 'https://gox147.github.io'
 const ORIGIN = SITE + BASE
 const REPO = 'https://github.com/14752222/Gox'
 const SITE_REPO = 'https://github.com/14752222/gox-website'
@@ -17,7 +17,7 @@ const jsonLdApp = {
   description:
     'Gox 是用 Go 从零实现的 JavaScript 运行时：词法分析 → 语法分析 → 字节码编译 → 栈式虚拟机执行。单二进制、零 cgo、零外部依赖，自带软件光栅化 GUI 与脚本打包器。',
   url: ORIGIN,
-  softwareVersion: '0.22.0',
+  softwareVersion: '0.23.0',
   license: 'https://opensource.org/licenses/Apache-2.0',
   author: { '@type': 'Person', name: '14752222', url: REPO },
   codeRepository: REPO,
