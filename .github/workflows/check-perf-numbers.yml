@@ -1,0 +1,49 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# 性能数字一致性闸门（官网侧）
+#
+# 背景：性能页的表格与结论行由主仓的 golden（docs/perf-numbers.json，从
+#   bench-results/*.json 提炼）渲染而来。本仓库不存第二份数字 —— 那正是过去出问题
+#   的方式：官网手抄了 2026-11-14 的快照（247ms / 1.22×），主仓 README 与 docs 却
+#   已经走到下一批（263ms / 1.03×），同一套材料三个出口各说各话。
+#
+# 判什么：本仓两页（guide/performance.md、en/guide/performance.md）里的数字块
+#   必须与主仓 golden **逐字**一致；不一致直接红。
+#
+# 为什么单独一个工作流：它与 notify-gox-pages 失败归因完全不同（一个是跨仓通知，
+#   一个是内容一致性），混在一起会让红的原因被淹没；而且这条不需要任何 secret。
+#   取 golden 走 GitHub raw（主仓 main 分支），只读公开文件，**不需要 token** ——
+#   避免为此再往仓库里塞一个 PAT。
+# ─────────────────────────────────────────────────────────────────────────────
+name: check-perf-numbers
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # 每天 UTC 21:07（北京时间 05:07）：主仓夜间跑完基准并刷新 golden 后，本仓次日凌晨
+    # 自己发现「页面落后了」；即使没人推本仓，也会有一条红提醒同步。
+    - cron: '7 21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-perf-numbers
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: 官网数字 == 主仓 golden
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 校验两页数字块与主仓 golden 一致
+        run: |
+          set -euo pipefail
+          # 脚本内部会先从 raw 拉主仓 golden，再逐字比对；失败时打印修法。
+          # 不加 `| tee`：管道会吃掉退出码，这条闸门必须真的拦得住。
+          ./scripts/check-perf-numbers.sh
