@@ -9,10 +9,14 @@
 # 判什么：本仓两页（guide/performance.md、en/guide/performance.md）里的数字块
 #   必须与主仓 golden **逐字**一致；不一致直接红。
 #
-# 为什么单独一个工作流：它与 notify-gox-pages 失败归因完全不同（一个是跨仓通知，
-#   一个是内容一致性），混在一起会让红的原因被淹没；而且这条不需要任何 secret。
-#   取 golden 走 GitHub raw（主仓 main 分支），只读公开文件，**不需要 token** ——
-#   避免为此再往仓库里塞一个 PAT。
+# ⚠ 为什么不用 actions/checkout：本仓的 Actions 策略是 allowed_actions = local_only
+#   （只有本仓内的 action 可用），任何 `uses: actions/checkout@v4` 都会让整个工作流
+#   在启动阶段就 startup_failure（无 job、无日志，2026-11-17 实测踩到）。所以这里
+#   刻意**零 uses**：git clone 取本仓（GITHUB_TOKEN 自带 contents: read），
+#   curl 取主仓 golden（GitHub raw，公开只读）。
+#
+# 为什么不改仓库策略：放宽 allowed_actions 是仓库级安全设置，影响所有工作流；
+#   为一条 5 秒的文本校验去放宽它，代价与收益明显不匹配。
 # ─────────────────────────────────────────────────────────────────────────────
 name: check-perf-numbers
 
@@ -39,11 +43,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-
-      - name: 校验两页数字块与主仓 golden 一致
+      - name: 取本仓（零第三方 action）
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          # 脚本内部会先从 raw 拉主仓 golden，再逐字比对；失败时打印修法。
+          # x-access-token:${GH_TOKEN} 是 GitHub 给 Actions 的推荐形式；clone 只读本仓。
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" site
+          ls site/scripts/check-perf-numbers.sh >/dev/null
+
+      - name: 校验两页数字块与主仓 golden 一致
+        working-directory: site
+        run: |
+          set -euo pipefail
+          # 脚本内部会从 raw 拉主仓 golden 再逐字比对；失败时打印修法。
           # 不加 `| tee`：管道会吃掉退出码，这条闸门必须真的拦得住。
           ./scripts/check-perf-numbers.sh
