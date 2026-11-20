@@ -15,6 +15,8 @@ Current release: **v0.28.0** (2026-11-20). This page covers the **most recent re
 
 ## In 30 seconds
 
+<div class="rel-table-wrap">
+
 | What you care about | The answer for this release |
 | --- | --- |
 | Is upgrading worth it | `npm i -g @goxjs/goxjs@latest` — conformance keeps climbing and startup got faster again; no code changes needed |
@@ -23,7 +25,9 @@ Current release: **v0.28.0** (2026-11-20). This page covers the **most recent re
 | Measurement discipline | A paired A/B tool `perf-ab.sh` and an **allocation budget gate** land; performance commits must carry paired data |
 | Any pitfalls | No breaking changes; one optimisation (linear-scan key markers) was **disproved and reverted** after 20 rounds and recorded as a negative result |
 
-## Highlights
+</div>
+
+## Highlights {#rel-highlights}
 
 ### Promise combinators rewritten for interleaving
 
@@ -34,11 +38,15 @@ failing cases. built-ins gained +128 cases because of it.
 
 ### First-frame startup work
 
+<div class="rel-table-wrap">
+
 | Change | Result |
 | --- | --- |
 | First GC no longer blocks on the window round trip | First frame -1.9ms / -22% (public figure -1.2ms / -6.7%) |
 | Built-in `length` no longer builds a map per property | Interpreter init -23.7% (reproducible in 10/10 runs) |
 | X11 connect warm-up (connect before starting font prefetch) | First frame -0.46 to 0.82ms / -4.7 to 8.2% |
+
+</div>
 
 > One further optimisation — removing the linear scan for key markers — measured only -0.13% over 20 paired runs,
 > below threshold, and was **reverted**. The negative result is recorded in the release notes; no unproven gain is

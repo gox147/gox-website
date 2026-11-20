@@ -372,9 +372,9 @@
   border-color: #4ade9c;
 }
 
-/* ===== 发版记录（/release/ 与首页「版本与现状」共用） ===== */
+/* ===== 发版记录（/release/） ===== */
 
-/* 卡片组：首页版本区与「最新发版」页顶部共用同一套外观 */
+/* 首页 / 最新发版页共用的小卡片（无则不影响） */
 .rel-cards,
 .rel-highlight {
   display: grid;
@@ -391,12 +391,11 @@
   border-left: 3px solid var(--vp-c-brand-1);
   border-radius: 8px;
   background: var(--vp-c-bg-soft);
-  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
 .rel-card:hover {
   border-color: var(--vp-c-brand-1);
   background: var(--vp-c-bg-elv);
-  transform: translateY(-1px);
 }
 .rel-card b {
   font-size: 15px;
@@ -408,39 +407,160 @@
   line-height: 1.6;
   color: var(--vp-c-text-2);
 }
-.rel-more {
+
+/* ── 文档版本提示条：本站文档比最新发布落后一截时，压在页首 ── */
+.vp-doc .docs-version-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 16px 0 24px;
+  padding: 10px 14px;
+  border: 1px solid var(--vp-custom-block-warning-border, #e8c579);
+  border-radius: 8px;
+  background: var(--vp-custom-block-warning-bg, rgba(232, 197, 121, 0.08));
   font-size: 13px;
-  color: var(--vp-c-text-3);
-  margin: 4px 0 0;
+  line-height: 1.6;
 }
+.vp-doc .docs-version-banner span { color: var(--vp-c-text-2); }
+.vp-doc .docs-version-banner a { font-weight: 600; }
+.vp-doc .docs-version-banner b { color: var(--vp-c-text-1); }
 
-/* 更新日志表：日期 / 标签两列定宽，正文列吃满剩余宽度；窄屏兜底横向滚动 */
-.vp-doc .rel-table-wrap {
-  margin: 16px 0;
-  overflow-x: auto;
+/* ── 版本索引：30 个版本一屏铺开，等宽两字 ── */
+.vp-doc .rel-index {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 6px 10px;
+  margin: 16px 0 28px;
+  padding: 0;
+  list-style: none;
 }
-.vp-doc .rel-table-wrap table {
-  width: 100%;
-  min-width: 720px;
-  table-layout: fixed;
-  display: table;
+.vp-doc .rel-index li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background: var(--vp-c-bg-soft);
+  font-size: 13px;
+  line-height: 1.4;
 }
-.vp-doc .rel-table-wrap th:nth-child(1),
-.vp-doc .rel-table-wrap td:nth-child(1) { width: 156px; }
-.vp-doc .rel-table-wrap th:nth-child(2),
-.vp-doc .rel-table-wrap td:nth-child(2) { width: 116px; white-space: nowrap; }
-.vp-doc .rel-table-wrap th:nth-child(3),
-.vp-doc .rel-table-wrap td:nth-child(3) { width: 168px; line-height: 1.5; }
-.vp-doc .rel-table-wrap td { line-height: 1.6; }
-
-
-.vp-doc .rel-ver {
+.vp-doc .rel-index li:hover { border-color: var(--vp-c-brand-1); }
+.vp-doc .rel-index a {
   font-family: var(--vp-font-family-mono);
   font-weight: 600;
   color: var(--vp-c-brand-1);
-  white-space: nowrap;
 }
-/* 锚点只做定位，不留视觉痕迹（版本号本身才是可点的目标） */
-.vp-doc [id^='v0-'] {
+.vp-doc .rel-index span {
+  font-size: 11px;
+  color: var(--vp-c-text-3);
+}
+
+/* ── 版本卡片：一版一张，不再用多列表格 ── */
+.vp-doc .rel-entry {
+  margin: 0 0 20px;
+  padding: 18px 20px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--vp-c-bg-soft);
+  /* 锚点跳转时给固定导航栏留出让位 */
   scroll-margin-top: 88px;
+}
+.vp-doc .rel-entry > h2 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 17px;
+  line-height: 1.4;
+  font-family: var(--vp-font-family-mono);
+  letter-spacing: 0.02em;
+}
+.vp-doc .rel-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin: 8px 0 12px;
+  font-size: 12px;
+}
+.vp-doc .rel-date {
+  color: var(--vp-c-text-3);
+  font-family: var(--vp-font-family-mono);
+}
+.vp-doc .rel-tag {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.vp-doc .rel-link {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+}
+.vp-doc .rel-link:hover { color: var(--vp-c-brand-1); }
+
+/* 摘要：整卡最显眼的一行，读不下去的人只看这里就够 */
+.vp-doc .rel-entry > .rel-summary {
+  margin: 0 0 10px;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.65;
+  color: var(--vp-c-text-1);
+}
+
+/* 细节：编号要点，不再挤在单元格里 */
+.vp-doc .rel-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13.5px;
+  line-height: 1.72;
+}
+.vp-doc .rel-points li {
+  position: relative;
+  margin: 0 0 10px;
+  padding-left: 14px;
+  color: var(--vp-c-text-2);
+}
+/* 每个要点前一根细细的竖线，子条再多也分得清层级 */
+.vp-doc .rel-points li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.62em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--vp-c-brand-1);
+  opacity: 0.55;
+}
+.vp-doc .rel-points li:last-child { margin-bottom: 0; }
+.vp-doc .rel-points li code { font-size: 12px; }
+
+@media (max-width: 640px) {
+  .vp-doc .rel-entry { padding: 14px; }
+  .vp-doc .rel-link { margin-left: 0; }
+  .vp-doc .rel-index { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); }
+}
+
+/* 发版页里的两列小表：窄屏可横滚，不撑破卡片 */
+.vp-doc .rel-table-wrap {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.vp-doc .rel-table-wrap table {
+  display: table;
+  width: 100%;
+  min-width: 480px;
+}
+/* 发版页两列表：第一列定宽，短词不折成两行 */
+.vp-doc .rel-table-wrap th:first-child,
+.vp-doc .rel-table-wrap td:first-child {
+  width: 128px;
+  white-space: nowrap;
 }
