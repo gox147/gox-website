@@ -8,7 +8,7 @@ description: Gox 全部版本的发版记录 —— 一版一卡，按时间倒�
 <div class="docs-version-banner" role="note">
   <span>本站文档对应 <b>v0.15.0</b>，当前已发布 <b>v0.28.0</b>。</span>
   <a href="https://github.com/14752222/Gox/releases/latest">看最新发布</a>
-  <a href="/release/#rel-highlights">看 0.28.0 改了什么</a>
+  <a href="../release/#rel-highlights">看 0.28.0 改了什么</a>
 </div>
 
 Gox 的发版记录，**按时间倒序**，一版一张卡片。卡片头部是版本号、发版日期和标签，正文第一行是一句话摘要，
@@ -25,36 +25,36 @@ Gox 的发版记录，**按时间倒序**，一版一张卡片。卡片头部是
 ## 版本索引
 
 <ul class="rel-index">
-  <li><a href="/release/changelog#v0-28-0">v0.28.0</a><span>2026-11-20</span></li>
-  <li><a href="/release/changelog#v0-27-0">v0.27.0</a><span>2026-11-19</span></li>
-  <li><a href="/release/changelog#v0-26-0">v0.26.0</a><span>2026-11-18</span></li>
-  <li><a href="/release/changelog#v0-25-0">v0.25.0</a><span>2026-11-16</span></li>
-  <li><a href="/release/changelog#v0-24-0">v0.24.0</a><span>2026-11-15</span></li>
-  <li><a href="/release/changelog#v0-23-0">v0.23.0</a><span>2026-11-13</span></li>
-  <li><a href="/release/changelog#v0-22-0">v0.22.0</a><span>2026-11-12</span></li>
-  <li><a href="/release/changelog#v0-21-0">v0.21.0</a><span>2026-11-11</span></li>
-  <li><a href="/release/changelog#v0-20-0">v0.20.0</a><span>2026-11-10</span></li>
-  <li><a href="/release/changelog#v0-19-0">v0.19.0</a><span>2026-11-08</span></li>
-  <li><a href="/release/changelog#v0-18-0">v0.18.0</a><span>2026-11-06</span></li>
-  <li><a href="/release/changelog#v0-17-0">v0.17.0</a><span>2026-11-04</span></li>
-  <li><a href="/release/changelog#v0-16-0">v0.16.0</a><span>2026-11-02</span></li>
-  <li><a href="/release/changelog#v0-15-34">v0.15.34</a><span>2026-10-30</span></li>
-  <li><a href="/release/changelog#v0-15-30">v0.15.30 ~ 0.15.33</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-15-18">v0.15.18 ~ 0.15.29</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-15-1">v0.15.1 ~ 0.15.17</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-15-0">v0.15.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-14-1">v0.14.1</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-14-0">v0.14.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-13-0">v0.13.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-12-0">v0.12.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-11-0">v0.11.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-10-0">v0.10.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-9-0">v0.9.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-8-0">v0.8.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-7-0">v0.7.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-6-0">v0.6.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-5-0">v0.5.0</a><span>—</span></li>
-  <li><a href="/release/changelog#v0-4-0">v0.4.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-28-0">v0.28.0</a><span>2026-11-20</span></li>
+  <li><a href="./changelog#v0-27-0">v0.27.0</a><span>2026-11-19</span></li>
+  <li><a href="./changelog#v0-26-0">v0.26.0</a><span>2026-11-18</span></li>
+  <li><a href="./changelog#v0-25-0">v0.25.0</a><span>2026-11-16</span></li>
+  <li><a href="./changelog#v0-24-0">v0.24.0</a><span>2026-11-15</span></li>
+  <li><a href="./changelog#v0-23-0">v0.23.0</a><span>2026-11-13</span></li>
+  <li><a href="./changelog#v0-22-0">v0.22.0</a><span>2026-11-12</span></li>
+  <li><a href="./changelog#v0-21-0">v0.21.0</a><span>2026-11-11</span></li>
+  <li><a href="./changelog#v0-20-0">v0.20.0</a><span>2026-11-10</span></li>
+  <li><a href="./changelog#v0-19-0">v0.19.0</a><span>2026-11-08</span></li>
+  <li><a href="./changelog#v0-18-0">v0.18.0</a><span>2026-11-06</span></li>
+  <li><a href="./changelog#v0-17-0">v0.17.0</a><span>2026-11-04</span></li>
+  <li><a href="./changelog#v0-16-0">v0.16.0</a><span>2026-11-02</span></li>
+  <li><a href="./changelog#v0-15-34">v0.15.34</a><span>2026-10-30</span></li>
+  <li><a href="./changelog#v0-15-30">v0.15.30 ~ 0.15.33</a><span>—</span></li>
+  <li><a href="./changelog#v0-15-18">v0.15.18 ~ 0.15.29</a><span>—</span></li>
+  <li><a href="./changelog#v0-15-1">v0.15.1 ~ 0.15.17</a><span>—</span></li>
+  <li><a href="./changelog#v0-15-0">v0.15.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-14-1">v0.14.1</a><span>—</span></li>
+  <li><a href="./changelog#v0-14-0">v0.14.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-13-0">v0.13.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-12-0">v0.12.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-11-0">v0.11.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-10-0">v0.10.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-9-0">v0.9.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-8-0">v0.8.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-7-0">v0.7.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-6-0">v0.6.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-5-0">v0.5.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-4-0">v0.4.0</a><span>—</span></li>
 </ul>
 
 ## 全部版本
@@ -170,7 +170,7 @@ Gox 的发版记录，**按时间倒序**，一版一张卡片。卡片头部是
 <div class="rel-entry" id="v0-21-0">
 <h2>v0.21.0</h2>
 <div class="rel-meta"><span class="rel-date">2026-11-11</span><span class="rel-tag">test262</span><a class="rel-link" href="https://github.com/14752222/Gox/releases/tag/vv0.21.0">Release</a></div>
-<p class="rel-summary">test262 C-4 批次清扫 —— 三条根因各带一批：① 编译器 <code>obj.m(...args)</code> / <code>obj<a href="...args">k</a></code> 带 spread 的成员调用此前落入通用裸调用路径、接收者丢失成 <code>undefined</code>，两个成员调用分支改走 <code>OP_CALL_METHOD_SPREAD</code>（arguments-object 族 +9、Temporal subclassing-ignored 族 +25，本批最大单根因）；② 解析器把 <code>1E+309</code> 这类超范围浮点字面量误判为语法错误（<code>ParseFloat</code> 的 <code>ErrRange</code> 被当成 parse error），改为按规范取 <code>±Infinity</code>（indexOf / lastIndexOf 整数极限族）；③ <code>stdlib/array</code>：<code>toSpliced</code> 在参数少于 2 个时 <code>args[2:]</code> 越界 panic（crash 级 4 例）、<code>copyWithin</code> 空数组早退跳过 <code>ToInteger</code> 且拷贝循环不查 get/set/delete 的 abrupt completion、<code>keys</code>/<code>values</code>/<code>entries</code> 补 <code>CreateArrayIterator</code> 泛型路径（任意对象含 resizable TypedArray 可作接收者、每次 <code>next</code> 动态读 length）</p>
+<p class="rel-summary">test262 C-4 批次清扫 —— 三条根因各带一批：① 编译器 <code>obj.m(...args)</code> / <code>obj[k](...args)</code> 带 spread 的成员调用此前落入通用裸调用路径、接收者丢失成 <code>undefined</code>，两个成员调用分支改走 <code>OP_CALL_METHOD_SPREAD</code>（arguments-object 族 +9、Temporal subclassing-ignored 族 +25，本批最大单根因）；② 解析器把 <code>1E+309</code> 这类超范围浮点字面量误判为语法错误（<code>ParseFloat</code> 的 <code>ErrRange</code> 被当成 parse error），改为按规范取 <code>±Infinity</code>（indexOf / lastIndexOf 整数极限族）；③ <code>stdlib/array</code>：<code>toSpliced</code> 在参数少于 2 个时 <code>args[2:]</code> 越界 panic（crash 级 4 例）、<code>copyWithin</code> 空数组早退跳过 <code>ToInteger</code> 且拷贝循环不查 get/set/delete 的 abrupt completion、<code>keys</code>/<code>values</code>/<code>entries</code> 补 <code>CreateArrayIterator</code> 泛型路径（任意对象含 resizable TypedArray 可作接收者、每次 <code>next</code> 动态读 length）</p>
 <ul class="rel-points">
 <li>A/B（同一 test262 快照，128 分片 × 32 并发）：language <strong>86.3125% → 86.3545%</strong>（20570→20580，+10）、built-ins <strong>75.3992% → 75.6590%</strong>（17991→18053，+62）、全量 <strong>80.8525% → 81.0035%</strong>（38561→38633，+72），三项逐用例 diff <strong>零退潮</strong></li>
 </ul>

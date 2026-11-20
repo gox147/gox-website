@@ -8,7 +8,7 @@ description: Every Gox release, one card per version — newest first, with rele
 <div class="docs-version-banner" role="note">
   <span>These docs describe <b>v0.15.0</b>; the current release is <b>v0.28.0</b>.</span>
   <a href="https://github.com/14752222/Gox/releases/latest">Latest release</a>
-  <a href="/en/release/#rel-highlights">What changed in 0.28.0</a>
+  <a href="../release/#rel-highlights">What changed in 0.28.0</a>
 </div>
 
 Every Gox release, **newest first**, one card per version. The card header carries the version, release date and tags;
@@ -25,36 +25,36 @@ Only **shipped versions** appear here. For the current release, see [Latest Rele
 ## Version index
 
 <ul class="rel-index">
-  <li><a href="/en/release/changelog#v0-28-0">0.28.0</a><span>2026-11-20</span></li>
-  <li><a href="/en/release/changelog#v0-27-0">0.27.0</a><span>2026-11-19</span></li>
-  <li><a href="/en/release/changelog#v0-26-0">0.26.0</a><span>2026-11-18</span></li>
-  <li><a href="/en/release/changelog#v0-25-0">0.25.0</a><span>2026-11-16</span></li>
-  <li><a href="/en/release/changelog#v0-24-0">0.24.0</a><span>2026-11-15</span></li>
-  <li><a href="/en/release/changelog#v0-23-0">0.23.0</a><span>2026-11-13</span></li>
-  <li><a href="/en/release/changelog#v0-22-0">0.22.0</a><span>2026-11-12</span></li>
-  <li><a href="/en/release/changelog#v0-21-0">0.21.0</a><span>2026-11-11</span></li>
-  <li><a href="/en/release/changelog#v0-20-0">0.20.0</a><span>2026-11-10</span></li>
-  <li><a href="/en/release/changelog#v0-19-0">0.19.0</a><span>2026-11-08</span></li>
-  <li><a href="/en/release/changelog#v0-18-0">0.18.0</a><span>2026-11-06</span></li>
-  <li><a href="/en/release/changelog#v0-17-0">0.17.0</a><span>2026-11-04</span></li>
-  <li><a href="/en/release/changelog#v0-16-0">0.16.0</a><span>2026-11-02</span></li>
-  <li><a href="/en/release/changelog#v0-15-34">0.15.34</a><span>2026-10-30</span></li>
-  <li><a href="/en/release/changelog#v0-15-30">0.15.30 ~ 0.15.33</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-15-18">0.15.18 ~ 0.15.29</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-15-1">0.15.1 ~ 0.15.17</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-15-0">0.15.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-14-1">0.14.1</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-14-0">0.14.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-13-0">0.13.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-12-0">0.12.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-11-0">0.11.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-10-0">0.10.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-9-0">0.9.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-8-0">0.8.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-7-0">0.7.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-6-0">0.6.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-5-0">0.5.0</a><span>—</span></li>
-  <li><a href="/en/release/changelog#v0-4-0">0.4.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-28-0">0.28.0</a><span>2026-11-20</span></li>
+  <li><a href="./changelog#v0-27-0">0.27.0</a><span>2026-11-19</span></li>
+  <li><a href="./changelog#v0-26-0">0.26.0</a><span>2026-11-18</span></li>
+  <li><a href="./changelog#v0-25-0">0.25.0</a><span>2026-11-16</span></li>
+  <li><a href="./changelog#v0-24-0">0.24.0</a><span>2026-11-15</span></li>
+  <li><a href="./changelog#v0-23-0">0.23.0</a><span>2026-11-13</span></li>
+  <li><a href="./changelog#v0-22-0">0.22.0</a><span>2026-11-12</span></li>
+  <li><a href="./changelog#v0-21-0">0.21.0</a><span>2026-11-11</span></li>
+  <li><a href="./changelog#v0-20-0">0.20.0</a><span>2026-11-10</span></li>
+  <li><a href="./changelog#v0-19-0">0.19.0</a><span>2026-11-08</span></li>
+  <li><a href="./changelog#v0-18-0">0.18.0</a><span>2026-11-06</span></li>
+  <li><a href="./changelog#v0-17-0">0.17.0</a><span>2026-11-04</span></li>
+  <li><a href="./changelog#v0-16-0">0.16.0</a><span>2026-11-02</span></li>
+  <li><a href="./changelog#v0-15-34">0.15.34</a><span>2026-10-30</span></li>
+  <li><a href="./changelog#v0-15-30">0.15.30 ~ 0.15.33</a><span>—</span></li>
+  <li><a href="./changelog#v0-15-18">0.15.18 ~ 0.15.29</a><span>—</span></li>
+  <li><a href="./changelog#v0-15-1">0.15.1 ~ 0.15.17</a><span>—</span></li>
+  <li><a href="./changelog#v0-15-0">0.15.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-14-1">0.14.1</a><span>—</span></li>
+  <li><a href="./changelog#v0-14-0">0.14.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-13-0">0.13.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-12-0">0.12.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-11-0">0.11.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-10-0">0.10.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-9-0">0.9.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-8-0">0.8.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-7-0">0.7.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-6-0">0.6.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-5-0">0.5.0</a><span>—</span></li>
+  <li><a href="./changelog#v0-4-0">0.4.0</a><span>—</span></li>
 </ul>
 
 ## All versions
@@ -111,7 +111,7 @@ Only **shipped versions** appear here. For the current release, see [Latest Rele
 <div class="rel-entry" id="v0-21-0">
 <h2>0.21.0</h2>
 <div class="rel-meta"><span class="rel-date">2026-11-11</span><span class="rel-tag">test262</span><a class="rel-link" href="https://github.com/14752222/Gox/releases/tag/v0.21.0">Release notes</a></div>
-<p class="rel-summary">test262 C-4 batch sweep — three root causes, each unlocking a cluster: (1) member calls with spread, <code>obj.m(...args)</code> / <code>obj<a href="...args">k</a></code>, fell into the generic bare-call path and lost the receiver to <code>undefined</code>; both member-call branches now route through <code>OP_CALL_METHOD_SPREAD</code> (arguments-object family +9, Temporal subclassing-ignored family +25 — the largest single root cause this batch); (2) the parser treated out-of-range float literals such as <code>1E+309</code> as syntax errors (<code>ParseFloat</code>'s <code>ErrRange</code> misread as a parse error), and now yields <code>±Infinity</code> per spec (indexOf / lastIndexOf integer-limit family); (3) <code>stdlib/array</code>: <code>toSpliced</code> panicked on the <code>args[2:]</code> slice when fewer than two arguments were passed (crash level, 4 cases), <code>copyWithin</code> skipped <code>ToInteger</code> on the empty-array early return and ignored abrupt completion from get/set/delete inside the copy loop, and <code>keys</code>/<code>values</code>/<code>entries</code> gained the generic <code>CreateArrayIterator</code> path (any object, including resizable TypedArrays, as receiver; <code>length</code> re-read on every <code>next</code>). A/B on the same test262 snapshot (128 shards × 32 concurrency): language <strong>86.3125% → 86.3545%</strong> (20570→20580, +10), built-ins <strong>75.3992% → 75.6590%</strong> (17991→18053, +62), all <strong>80.8525% → 81.0035%</strong> (38561→38633, +72), zero regressions case-by-case</p>
+<p class="rel-summary">test262 C-4 batch sweep — three root causes, each unlocking a cluster: (1) member calls with spread, <code>obj.m(...args)</code> / <code>obj[k](...args)</code>, fell into the generic bare-call path and lost the receiver to <code>undefined</code>; both member-call branches now route through <code>OP_CALL_METHOD_SPREAD</code> (arguments-object family +9, Temporal subclassing-ignored family +25 — the largest single root cause this batch); (2) the parser treated out-of-range float literals such as <code>1E+309</code> as syntax errors (<code>ParseFloat</code>'s <code>ErrRange</code> misread as a parse error), and now yields <code>±Infinity</code> per spec (indexOf / lastIndexOf integer-limit family); (3) <code>stdlib/array</code>: <code>toSpliced</code> panicked on the <code>args[2:]</code> slice when fewer than two arguments were passed (crash level, 4 cases), <code>copyWithin</code> skipped <code>ToInteger</code> on the empty-array early return and ignored abrupt completion from get/set/delete inside the copy loop, and <code>keys</code>/<code>values</code>/<code>entries</code> gained the generic <code>CreateArrayIterator</code> path (any object, including resizable TypedArrays, as receiver; <code>length</code> re-read on every <code>next</code>). A/B on the same test262 snapshot (128 shards × 32 concurrency): language <strong>86.3125% → 86.3545%</strong> (20570→20580, +10), built-ins <strong>75.3992% → 75.6590%</strong> (17991→18053, +62), all <strong>80.8525% → 81.0035%</strong> (38561→38633, +72), zero regressions case-by-case</p>
 </div>
 
 
