@@ -74,6 +74,19 @@ const jsonLdFaq = {
 }
 
 // 中文（根 locale）侧边栏
+const sidebarReleaseZh = {
+  '/release/': [
+    {
+      text: '发版记录',
+      items: [
+        { text: '最新发版', link: '/release/' },
+        { text: '更新日志', link: '/release/changelog' },
+        { text: 'GitHub Releases', link: 'https://github.com/14752222/Gox/releases' },
+      ],
+    },
+  ],
+}
+
 const sidebarGuideZh = {
   '/guide/': [
     {
@@ -130,6 +143,19 @@ const sidebarGuideZh = {
 }
 
 // 英文（/en/ locale）侧边栏
+const sidebarReleaseEn = {
+  '/en/release/': [
+    {
+      text: 'Releases',
+      items: [
+        { text: 'Latest Release', link: '/en/release/' },
+        { text: 'Changelog', link: '/en/release/changelog' },
+        { text: 'GitHub Releases', link: 'https://github.com/14752222/Gox/releases' },
+      ],
+    },
+  ],
+}
+
 const sidebarGuideEn = {
   '/en/guide/': [
     {
@@ -228,8 +254,10 @@ export default defineConfig({
           { text: '使用教程', link: '/guide/', activeMatch: '/guide/' },
           { text: '组件参考', link: '/components/', activeMatch: '/components/' },
           { text: 'API 参考', link: '/api/', activeMatch: '/api/' },
+          // 更新日志是独立一级模块（发版记录），放导航栏最右、不挂在教程 / 组件 / API 下面
+          { text: '更新日志', link: '/release/changelog', activeMatch: '/release/' },
         ],
-        sidebar: sidebarGuideZh,
+        sidebar: { ...sidebarReleaseZh, ...sidebarGuideZh },
         outline: { level: [2, 3], label: '本页目录' },
         search: {
           provider: 'local',
@@ -274,8 +302,9 @@ export default defineConfig({
           { text: 'Guide', link: '/en/guide/', activeMatch: '/en/guide/' },
           { text: 'Components', link: '/en/components/', activeMatch: '/en/components/' },
           { text: 'API Reference', link: '/en/api/', activeMatch: '/en/api/' },
+          { text: 'Changelog', link: '/en/release/changelog', activeMatch: '/en/release/' },
         ],
-        sidebar: sidebarGuideEn,
+        sidebar: { ...sidebarReleaseEn, ...sidebarGuideEn },
         outline: { level: [2, 3], label: 'On this page' },
         search: { provider: 'local' },
         socialLinks: [{ icon: 'github', link: REPO }],

@@ -371,3 +371,76 @@
   color: #4ade9c;
   border-color: #4ade9c;
 }
+
+/* ===== 发版记录（/release/ 与首页「版本与现状」共用） ===== */
+
+/* 卡片组：首页版本区与「最新发版」页顶部共用同一套外观 */
+.rel-cards,
+.rel-highlight {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 18px 0 8px;
+}
+.rel-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--vp-c-divider);
+  border-left: 3px solid var(--vp-c-brand-1);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+}
+.rel-card:hover {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-bg-elv);
+  transform: translateY(-1px);
+}
+.rel-card b {
+  font-size: 15px;
+  color: var(--vp-c-brand-1);
+  font-family: var(--vp-font-family-mono);
+}
+.rel-card span {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
+}
+.rel-more {
+  font-size: 13px;
+  color: var(--vp-c-text-3);
+  margin: 4px 0 0;
+}
+
+/* 更新日志表：日期 / 标签两列定宽，正文列吃满剩余宽度；窄屏兜底横向滚动 */
+.vp-doc .rel-table-wrap {
+  margin: 16px 0;
+  overflow-x: auto;
+}
+.vp-doc .rel-table-wrap table {
+  width: 100%;
+  min-width: 720px;
+  table-layout: fixed;
+  display: table;
+}
+.vp-doc .rel-table-wrap th:nth-child(1),
+.vp-doc .rel-table-wrap td:nth-child(1) { width: 156px; }
+.vp-doc .rel-table-wrap th:nth-child(2),
+.vp-doc .rel-table-wrap td:nth-child(2) { width: 116px; white-space: nowrap; }
+.vp-doc .rel-table-wrap th:nth-child(3),
+.vp-doc .rel-table-wrap td:nth-child(3) { width: 168px; line-height: 1.5; }
+.vp-doc .rel-table-wrap td { line-height: 1.6; }
+
+
+.vp-doc .rel-ver {
+  font-family: var(--vp-font-family-mono);
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+  white-space: nowrap;
+}
+/* 锚点只做定位，不留视觉痕迹（版本号本身才是可点的目标） */
+.vp-doc [id^='v0-'] {
+  scroll-margin-top: 88px;
+}
